@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('weather.jpeg') no-repeat center center/cover;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            width: 85%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weather App</h2>
+        <input type="text" id="location" placeholder="Enter location">
+        <button onclick="getWeather()">Get Weather</button>
+        <div class="info">
+            <h3 id="temperature"></h3>
+            <h4 id="condition"></h4>
+            <h4 id="humidity"></h4>
+            <h4 id="wind"></h4>
+        </div>
+    </div>
+    
+    <script>
+        function getWeather() {
+            let location = document.getElementById("location").value;
+            let apiKey = "c19d45cfa87248de9cb94123250204";
+            let url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let temp = data.current.temp_c;
+                    let condition = data.current.condition.text;
+                    let humidity = data.current.humidity;
+                    let wind = data.current.wind_kph;
+                    
+                    document.getElementById("temperature").innerText = `Temperature: ${temp}°C`;
+                    document.getElementById("condition").innerText = `Condition: ${condition}`;
+                    document.getElementById("humidity").innerText = `Humidity: ${humidity}%`;
+                    document.getElementById("wind").innerText = `Wind Speed: ${wind} kph`;
+                })
+                .catch(error => {
+                    document.getElementById("temperature").innerText = "Invalid location or error fetching data.";
+                    document.getElementById("condition").innerText = "";
+                    document.getElementById("humidity").innerText = "";
+                    document.getElementById("wind").innerText = "";
+                });
+        }
+    </script>
+</body>
+</html>
